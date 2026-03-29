@@ -10,7 +10,17 @@
             <RowDefinition Height="150"/>
         </Grid.RowDefinitions>
 
-        <TextBlock Text="ĐƠN HÀNG CỦA TÔI" FontSize="20" FontWeight="Bold" Margin="0,0,0,10" Foreground="#2C3E50"/>
+        <DockPanel Grid.Row="0" Margin="0,0,0,10">
+            <TextBlock Text="ĐƠN HÀNG CỦA TÔI" FontSize="20" FontWeight="Bold" Foreground="#2C3E50" VerticalAlignment="Center"/>
+            <Button Content="🔄 Làm mới trạng thái" Click="BtnRefresh_Click" HorizontalAlignment="Right" 
+                    Padding="15,5" Background="#3498DB" Foreground="White" FontWeight="Bold" Cursor="Hand">
+                <Button.Resources>
+                    <Style TargetType="Border">
+                        <Setter Property="CornerRadius" Value="5"/>
+                    </Style>
+                </Button.Resources>
+            </Button>
+        </DockPanel>
 
         <DataGrid Grid.Row="1" x:Name="dgOrders" AutoGenerateColumns="False" 
                   CanUserAddRows="False" IsReadOnly="True" 
@@ -27,13 +37,10 @@
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <StackPanel Orientation="Horizontal">
-                                <Button Content="Hủy đơn" Margin="2" Padding="5,2" Background="#E74C3C" Foreground="White"
-                                        Click="BtnCancelOrder_Click"
-                                        Visibility="{Binding Status, Converter={StaticResource StatusToCancelVisibilityConverter}}"/>
-
-                                <Button Content="Đã nhận hàng" Margin="2" Padding="5,2" Background="#27AE60" Foreground="White"
-                                        Click="BtnReceived_Click"
-                                        Visibility="{Binding Status, Converter={StaticResource StatusToReceivedVisibilityConverter}}"/>
+                                <Button Content="Hủy đơn" Margin="2" Padding="8,2" Background="#E74C3C" Foreground="White"
+                                        Click="BtnCancelOrder_Click" Cursor="Hand"/>
+                                <Button Content="Đã nhận hàng" Margin="2" Padding="8,2" Background="#27AE60" Foreground="White"
+                                        Click="BtnReceived_Click" Cursor="Hand"/>
                             </StackPanel>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>

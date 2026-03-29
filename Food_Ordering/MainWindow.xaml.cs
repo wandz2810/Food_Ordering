@@ -1,10 +1,11 @@
-﻿using Food_Ordering.Entities;
-using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.ObjectModel;
+﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows;
+using System.Windows.Controls;
+using Food_Ordering.Entities;
+using Microsoft.EntityFrameworkCore;
 
 namespace Food_Ordering
 {
@@ -51,15 +52,51 @@ namespace Food_Ordering
 
         private void BtnAddToCart_Click(object sender, RoutedEventArgs e)
         {
-            // Thêm món được chọn từ ListBox vào giỏ hàng
             if (lbFoodItems.SelectedItem is FoodItem selected)
             {
-                _myCart.Add(selected);
+                // Kiểm tra xem món đã có trong giỏ chưa (dựa vào ID)
+                var itemInCart = _myCart.FirstOrDefault(x => x.FoodItemId == selected.FoodItemId);
+
+                if (itemInCart != null)
+                {
+                    itemInCart.Quantity++; // Nếu có rồi thì tăng số lượng
+                }
+                else
+                {
+                    selected.Quantity = 1; // Nếu chưa có, gán mặc định là 1
+                    _myCart.Add(selected);
+                }
+                dgCart.Items.Refresh(); // Quan trọng: Để DataGrid cập nhật lại con số hiển thị
                 UpdateTotal();
             }
-            else
+        }
+
+        // 2. Nút Tăng [+]
+        private void BtnIncrease_Click(object sender, RoutedEventArgs e)
+        {
+            if (((Button)sender).DataContext is FoodItem item)
             {
-                MessageBox.Show("Vui lòng chọn một món ăn từ thực đơn!");
+                item.Quantity++;
+                dgCart.Items.Refresh();
+                UpdateTotal();
+            }
+        }
+
+        // 3. Nút Giảm [-]
+        private void BtnDecrease_Click(object sender, RoutedEventArgs e)
+        {
+            if (((Button)sender).DataContext is FoodItem item)
+            {
+                if (item.Quantity > 1)
+                {
+                    item.Quantity--;
+                }
+                else
+                {
+                    _myCart.Remove(item); // Nếu giảm về 0 thì xóa khỏi giỏ
+                }
+                dgCart.Items.Refresh();
+                UpdateTotal();
             }
         }
 
@@ -75,10 +112,10 @@ namespace Food_Ordering
 
         private void UpdateTotal()
         {
-            // Tính tổng tiền và cập nhật lên giao diện
             if (txtTotal != null)
             {
-                txtTotal.Text = $"Tổng cộng: {_myCart.Sum(x => x.Price):N0} VNĐ";
+                decimal total = _myCart.Sum(x => x.Price * x.Quantity);
+                txtTotal.Text = $"{total:N0} VNĐ";
             }
         }
 
