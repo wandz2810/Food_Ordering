@@ -1,12 +1,370 @@
-﻿<Window x:Class="Food_Ordering.Admin.AdminWindow"
+<Window x:Class="Food_Ordering.Admin.AdminWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:Food_Ordering.Admin"
-        mc:Ignorable="d"
-        Title="AdminWindow" Height="450" Width="800">
-    <Grid>
-        
+        Title="Admin - Food Ordering" Height="650" Width="1050"
+        WindowStartupLocation="CenterScreen">
+    <Grid Margin="10">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <!-- Header -->
+        <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="0,0,0,10">
+            <TextBlock Text="Admin Panel" FontSize="20" FontWeight="Bold" Foreground="#2C3E50" VerticalAlignment="Center"/>
+            <Button x:Name="btnLogout" Content="🚪 Logout" Click="btnLogout_Click"
+                    Background="#E74C3C" Foreground="White" Padding="10,5" FontWeight="Bold"
+                    Cursor="Hand" HorizontalAlignment="Right" Margin="20,0,0,0">
+                <Button.Resources>
+                    <Style TargetType="Border"><Setter Property="CornerRadius" Value="5"/></Style>
+                </Button.Resources>
+            </Button>
+        </StackPanel>
+
+        <!-- Tab Control -->
+        <TabControl Grid.Row="1" x:Name="tabMain" SelectionChanged="tabMain_SelectionChanged">
+
+            <!-- ─── DASHBOARD ─── -->
+            <TabItem Header="Dashboard">
+                <StackPanel Margin="10">
+                    <TextBlock Text="Overview" FontSize="16" FontWeight="Bold" Foreground="#2C3E50" Margin="0,0,0,10"/>
+                    <DataGrid x:Name="dgDashboard" AutoGenerateColumns="False" IsReadOnly="True"
+                              Height="200" CanUserAddRows="False" BorderBrush="#BDC3C7">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="Metric" Binding="{Binding Metric}" Width="250"/>
+                            <DataGridTextColumn Header="Value" Binding="{Binding Value}" Width="150"/>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </StackPanel>
+            </TabItem>
+
+            <!-- ─── USERS ─── -->
+            <TabItem Header="Users">
+                <Grid Margin="10">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+
+                    <!-- Create User -->
+                    <GroupBox Grid.Row="0" Header="Create User" Margin="0,0,0,8">
+                        <StackPanel>
+                            <StackPanel Orientation="Horizontal" Margin="0,5">
+                                <TextBlock Text="Email:" Width="80" VerticalAlignment="Center"/>
+                                <TextBox x:Name="txtUserEmail" Width="180" Margin="0,0,10,0"/>
+                                <TextBlock Text="Password:" Width="65" VerticalAlignment="Center"/>
+                                <PasswordBox x:Name="txtUserPassword" Width="130" Margin="0,0,10,0"/>
+                                <TextBlock Text="Full Name:" Width="70" VerticalAlignment="Center"/>
+                                <TextBox x:Name="txtUserFullName" Width="150"/>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal" Margin="0,5">
+                                <TextBlock Text="Phone:" Width="80" VerticalAlignment="Center"/>
+                                <TextBox x:Name="txtUserPhone" Width="130" Margin="0,0,10,0"/>
+                                <TextBlock Text="Role:" Width="40" VerticalAlignment="Center"/>
+                                <ComboBox x:Name="cbUserRole" Width="140" Margin="0,0,10,0"
+                                          SelectionChanged="cbUserRole_SelectionChanged"/>
+                                <TextBlock x:Name="lblAddress" Text="Address:" Width="55" VerticalAlignment="Center" Visibility="Collapsed"/>
+                                <TextBox x:Name="txtUserAddress" Width="150" Margin="0,0,10,0" Visibility="Collapsed"/>
+                                <TextBlock x:Name="lblVehicle" Text="Vehicle:" Width="50" VerticalAlignment="Center" Visibility="Collapsed"/>
+                                <ComboBox x:Name="cbVehicleType" Width="90" Margin="0,0,5,0" Visibility="Collapsed"/>
+                                <TextBlock x:Name="lblPlate" Text="Plate:" Width="40" VerticalAlignment="Center" Visibility="Collapsed"/>
+                                <TextBox x:Name="txtUserLicensePlate" Width="100" Visibility="Collapsed"/>
+                            </StackPanel>
+                            <Button Content="Create User" Width="120" HorizontalAlignment="Left" Margin="0,5"
+                                    Background="#3498DB" Foreground="White" FontWeight="Bold" Click="btnCreateUser_Click">
+                                <Button.Resources>
+                                    <Style TargetType="Border"><Setter Property="CornerRadius" Value="5"/></Style>
+                                </Button.Resources>
+                            </Button>
+                        </StackPanel>
+                    </GroupBox>
+
+                    <!-- Search / Filter -->
+                    <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="0,0,0,5">
+                        <TextBlock Text="Search:" VerticalAlignment="Center" Margin="0,0,5,0"/>
+                        <TextBox x:Name="txtUserSearch" Width="200" Margin="0,0,15,0" TextChanged="txtUserSearch_TextChanged"/>
+                        <TextBlock Text="Role:" VerticalAlignment="Center" Margin="0,0,5,0"/>
+                        <ComboBox x:Name="cbUserFilter" Width="140" SelectionChanged="cbUserFilter_SelectionChanged"/>
+                    </StackPanel>
+
+                    <!-- Users Grid -->
+                    <DataGrid Grid.Row="2" x:Name="dgUsers" AutoGenerateColumns="False" IsReadOnly="True"
+                              CanUserAddRows="False" SelectionChanged="dgUsers_SelectionChanged"
+                              BorderBrush="#BDC3C7" SelectionMode="Single">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="ID" Binding="{Binding UserId}" Width="40"/>
+                            <DataGridTextColumn Header="Email" Binding="{Binding Email}" Width="180"/>
+                            <DataGridTextColumn Header="Full Name" Binding="{Binding FullName}" Width="140"/>
+                            <DataGridTextColumn Header="Phone" Binding="{Binding PhoneNumber}" Width="110"/>
+                            <DataGridTextColumn Header="Role" Binding="{Binding Role}" Width="110"/>
+                            <DataGridTextColumn Header="Status" Binding="{Binding Status}" Width="70"/>
+                            <DataGridTextColumn Header="Created" Binding="{Binding CreatedAt, StringFormat=dd/MM/yyyy}" Width="90"/>
+                        </DataGrid.Columns>
+                    </DataGrid>
+
+                    <!-- Edit / Delete -->
+                    <StackPanel Grid.Row="3" Orientation="Horizontal" Margin="0,8,0,0">
+                        <TextBlock Text="Full Name:" VerticalAlignment="Center" Margin="0,0,5,0"/>
+                        <TextBox x:Name="txtEditFullName" Width="150" Margin="0,0,10,0"/>
+                        <TextBlock Text="Phone:" VerticalAlignment="Center" Margin="0,0,5,0"/>
+                        <TextBox x:Name="txtEditPhone" Width="120" Margin="0,0,10,0"/>
+                        <TextBlock Text="Status:" VerticalAlignment="Center" Margin="0,0,5,0"/>
+                        <ComboBox x:Name="cbEditStatus" Width="90" Margin="0,0,10,0"/>
+                        <Button Content="Save" Width="70" Margin="0,0,5,0" Background="#3498DB" Foreground="White"
+                                FontWeight="Bold" Click="btnUpdateUser_Click">
+                            <Button.Resources><Style TargetType="Border"><Setter Property="CornerRadius" Value="5"/></Style></Button.Resources>
+                        </Button>
+                        <Button Content="Delete" Width="70" Background="#E74C3C" Foreground="White"
+                                FontWeight="Bold" Click="btnDeleteUser_Click">
+                            <Button.Resources><Style TargetType="Border"><Setter Property="CornerRadius" Value="5"/></Style></Button.Resources>
+                        </Button>
+                    </StackPanel>
+                </Grid>
+            </TabItem>
+
+            <!-- ─── RESTAURANTS ─── -->
+            <TabItem Header="Restaurants">
+                <Grid Margin="10">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+
+                    <!-- Create Restaurant -->
+                    <GroupBox Grid.Row="0" Header="Create Restaurant" Margin="0,0,0,8">
+                        <StackPanel>
+                            <StackPanel Orientation="Horizontal" Margin="0,5">
+                                <TextBlock Text="Owner:" Width="60" VerticalAlignment="Center"/>
+                                <ComboBox x:Name="cbRestOwner" Width="250" DisplayMemberPath="DisplayText" Margin="0,0,10,0"/>
+                                <TextBlock Text="Name:" Width="45" VerticalAlignment="Center"/>
+                                <TextBox x:Name="txtRestName" Width="200" Margin="0,0,10,0"/>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal" Margin="0,5">
+                                <TextBlock Text="Address:" Width="60" VerticalAlignment="Center"/>
+                                <TextBox x:Name="txtRestAddress" Width="250" Margin="0,0,10,0"/>
+                                <TextBlock Text="Description:" Width="75" VerticalAlignment="Center"/>
+                                <TextBox x:Name="txtRestDesc" Width="250"/>
+                            </StackPanel>
+                            <Button Content="Create Restaurant" Width="140" HorizontalAlignment="Left" Margin="0,5"
+                                    Background="#3498DB" Foreground="White" FontWeight="Bold" Click="btnCreateRestaurant_Click">
+                                <Button.Resources><Style TargetType="Border"><Setter Property="CornerRadius" Value="5"/></Style></Button.Resources>
+                            </Button>
+                        </StackPanel>
+                    </GroupBox>
+
+                    <!-- Restaurants Grid -->
+                    <DataGrid Grid.Row="1" x:Name="dgRestaurants" AutoGenerateColumns="False" IsReadOnly="True"
+                              CanUserAddRows="False" SelectionChanged="dgRestaurants_SelectionChanged"
+                              BorderBrush="#BDC3C7" SelectionMode="Single">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="ID" Binding="{Binding RestaurantId}" Width="40"/>
+                            <DataGridTextColumn Header="Name" Binding="{Binding Name}" Width="160"/>
+                            <DataGridTextColumn Header="Address" Binding="{Binding Address}" Width="200"/>
+                            <DataGridTextColumn Header="Owner" Binding="{Binding Owner.Owner.FullName}" Width="130"/>
+                            <DataGridCheckBoxColumn Header="Open" Binding="{Binding IsOpen}" Width="50"/>
+                            <DataGridTextColumn Header="Rating" Binding="{Binding AverageRating, StringFormat=0.00}" Width="60"/>
+                            <DataGridTextColumn Header="Orders" Binding="{Binding TotalOrders}" Width="60"/>
+                        </DataGrid.Columns>
+                    </DataGrid>
+
+                    <!-- Edit / Delete -->
+                    <StackPanel Grid.Row="2" Orientation="Horizontal" Margin="0,8,0,0">
+                        <TextBlock Text="Name:" VerticalAlignment="Center" Margin="0,0,5,0"/>
+                        <TextBox x:Name="txtEditRestName" Width="160" Margin="0,0,10,0"/>
+                        <TextBlock Text="Address:" VerticalAlignment="Center" Margin="0,0,5,0"/>
+                        <TextBox x:Name="txtEditRestAddress" Width="200" Margin="0,0,10,0"/>
+                        <TextBlock Text="Description:" VerticalAlignment="Center" Margin="0,0,5,0"/>
+                        <TextBox x:Name="txtEditRestDesc" Width="160" Margin="0,0,10,0"/>
+                        <CheckBox x:Name="chkEditRestOpen" Content="Open" VerticalAlignment="Center" Margin="0,0,10,0"/>
+                        <Button Content="Save" Width="60" Margin="0,0,5,0" Background="#3498DB" Foreground="White"
+                                FontWeight="Bold" Click="btnUpdateRestaurant_Click">
+                            <Button.Resources><Style TargetType="Border"><Setter Property="CornerRadius" Value="5"/></Style></Button.Resources>
+                        </Button>
+                        <Button Content="Delete" Width="60" Background="#E74C3C" Foreground="White"
+                                FontWeight="Bold" Click="btnDeleteRestaurant_Click">
+                            <Button.Resources><Style TargetType="Border"><Setter Property="CornerRadius" Value="5"/></Style></Button.Resources>
+                        </Button>
+                    </StackPanel>
+                </Grid>
+            </TabItem>
+
+            <!-- ─── ORDERS ─── -->
+            <TabItem Header="Orders">
+                <Grid Margin="10">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+
+                    <!-- Filter -->
+                    <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="0,0,0,8">
+                        <TextBlock Text="Filter by Status:" VerticalAlignment="Center" Margin="0,0,5,0"/>
+                        <ComboBox x:Name="cbOrderStatusFilter" Width="160"
+                                  SelectionChanged="cbOrderStatusFilter_SelectionChanged"/>
+                    </StackPanel>
+
+                    <!-- Orders Grid -->
+                    <DataGrid Grid.Row="1" x:Name="dgOrders" AutoGenerateColumns="False" IsReadOnly="True"
+                              CanUserAddRows="False" SelectionChanged="dgOrders_SelectionChanged"
+                              BorderBrush="#BDC3C7" SelectionMode="Single">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="ID" Binding="{Binding OrderId}" Width="40"/>
+                            <DataGridTextColumn Header="Customer" Binding="{Binding Customer.CustomerNavigation.FullName}" Width="130"/>
+                            <DataGridTextColumn Header="Restaurant" Binding="{Binding Restaurant.Name}" Width="140"/>
+                            <DataGridTextColumn Header="Total" Binding="{Binding TotalAmount, StringFormat=N0}" Width="90"/>
+                            <DataGridTextColumn Header="Status" Binding="{Binding Status}" Width="110"/>
+                            <DataGridTextColumn Header="Payment" Binding="{Binding PaymentMethod}" Width="70"/>
+                            <DataGridTextColumn Header="Created" Binding="{Binding CreatedAt, StringFormat=dd/MM/yyyy HH:mm}" Width="120"/>
+                        </DataGrid.Columns>
+                    </DataGrid>
+
+                    <!-- Update Status -->
+                    <StackPanel Grid.Row="2" Orientation="Horizontal" Margin="0,8,0,0">
+                        <TextBlock Text="Selected:" VerticalAlignment="Center" Margin="0,0,5,0"/>
+                        <TextBlock x:Name="lblSelectedOrderId" Text="-" FontWeight="Bold" VerticalAlignment="Center" Margin="0,0,15,0"/>
+                        <TextBlock Text="New Status:" VerticalAlignment="Center" Margin="0,0,5,0"/>
+                        <ComboBox x:Name="cbOrderNewStatus" Width="160" Margin="0,0,10,0"/>
+                        <Button Content="Update Status" Width="110" Background="#E67E22" Foreground="White"
+                                FontWeight="Bold" Click="btnUpdateOrderStatus_Click">
+                            <Button.Resources><Style TargetType="Border"><Setter Property="CornerRadius" Value="5"/></Style></Button.Resources>
+                        </Button>
+                    </StackPanel>
+
+                    <!-- Order Items -->
+                    <GroupBox Grid.Row="3" Header="Order Items" Margin="0,8,0,0">
+                        <DataGrid x:Name="dgOrderItems" Height="100" AutoGenerateColumns="False" IsReadOnly="True" CanUserAddRows="False">
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Header="Food Name" Binding="{Binding FoodName}" Width="200"/>
+                                <DataGridTextColumn Header="Price" Binding="{Binding FoodPrice, StringFormat=N0}" Width="100"/>
+                                <DataGridTextColumn Header="Qty" Binding="{Binding Quantity}" Width="60"/>
+                            </DataGrid.Columns>
+                        </DataGrid>
+                    </GroupBox>
+                </Grid>
+            </TabItem>
+
+            <!-- ─── FOOD ITEMS ─── -->
+            <TabItem Header="Food Items">
+                <Grid Margin="10">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+
+                    <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="0,0,0,8">
+                        <TextBlock Text="Restaurant:" VerticalAlignment="Center" Margin="0,0,5,0"/>
+                        <ComboBox x:Name="cbFoodRestFilter" Width="250"
+                                  SelectionChanged="cbFoodRestFilter_SelectionChanged"/>
+                        <Button Content="Toggle Availability" Width="140" Margin="15,0,0,0" Background="#E67E22"
+                                Foreground="White" FontWeight="Bold" Click="btnToggleAvailability_Click">
+                            <Button.Resources><Style TargetType="Border"><Setter Property="CornerRadius" Value="5"/></Style></Button.Resources>
+                        </Button>
+                    </StackPanel>
+
+                    <DataGrid Grid.Row="1" x:Name="dgFoodItems" AutoGenerateColumns="False" IsReadOnly="True"
+                              CanUserAddRows="False" BorderBrush="#BDC3C7" SelectionMode="Single">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="ID" Binding="{Binding FoodItemId}" Width="40"/>
+                            <DataGridTextColumn Header="Name" Binding="{Binding Name}" Width="180"/>
+                            <DataGridTextColumn Header="Price" Binding="{Binding Price, StringFormat=N0}" Width="90"/>
+                            <DataGridTextColumn Header="Category" Binding="{Binding Category}" Width="100"/>
+                            <DataGridTextColumn Header="Restaurant" Binding="{Binding Restaurant.Name}" Width="150"/>
+                            <DataGridCheckBoxColumn Header="Available" Binding="{Binding IsAvailable}" Width="70"/>
+                            <DataGridTextColumn Header="Limit" Binding="{Binding DailyQuantityLimit}" Width="60"/>
+                            <DataGridTextColumn Header="Used" Binding="{Binding DailyQuantityUsed}" Width="50"/>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </Grid>
+            </TabItem>
+
+            <!-- ─── APPLICATIONS ─── -->
+            <TabItem Header="Applications">
+                <Grid Margin="10">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+
+                    <!-- Shipper Applications -->
+                    <GroupBox Grid.Row="0" Margin="0,0,0,5">
+                        <GroupBox.Header>
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="Shipper Applications" FontWeight="Bold" VerticalAlignment="Center" Margin="0,0,10,0"/>
+                                <ComboBox x:Name="cbShipperAppFilter" Width="100"
+                                          SelectionChanged="cbShipperAppFilter_SelectionChanged"/>
+                            </StackPanel>
+                        </GroupBox.Header>
+                        <StackPanel>
+                            <DataGrid x:Name="dgShipperApps" Height="140" AutoGenerateColumns="False" IsReadOnly="True"
+                                      CanUserAddRows="False" SelectionMode="Single" SelectionChanged="dgShipperApps_SelectionChanged">
+                                <DataGrid.Columns>
+                                    <DataGridTextColumn Header="ID" Binding="{Binding ApplicationId}" Width="40"/>
+                                    <DataGridTextColumn Header="User" Binding="{Binding User.FullName}" Width="130"/>
+                                    <DataGridTextColumn Header="Email" Binding="{Binding User.Email}" Width="160"/>
+                                    <DataGridTextColumn Header="Vehicle" Binding="{Binding VehicleType}" Width="80"/>
+                                    <DataGridTextColumn Header="Plate" Binding="{Binding LicensePlate}" Width="100"/>
+                                    <DataGridTextColumn Header="ID Card" Binding="{Binding IdentityCard}" Width="110"/>
+                                    <DataGridTextColumn Header="Status" Binding="{Binding Status}" Width="70"/>
+                                </DataGrid.Columns>
+                            </DataGrid>
+                            <StackPanel Orientation="Horizontal" Margin="0,5,0,0">
+                                <TextBlock Text="Note:" VerticalAlignment="Center" Margin="0,0,5,0"/>
+                                <TextBox x:Name="txtShipperAppNote" Width="300" Margin="0,0,10,0"/>
+                                <Button Content="Approve" Width="80" Margin="0,0,5,0" Background="#27AE60" Foreground="White"
+                                        FontWeight="Bold" Click="btnApproveShipperApp_Click">
+                                    <Button.Resources><Style TargetType="Border"><Setter Property="CornerRadius" Value="5"/></Style></Button.Resources>
+                                </Button>
+                                <Button Content="Reject" Width="80" Background="#E74C3C" Foreground="White"
+                                        FontWeight="Bold" Click="btnRejectShipperApp_Click">
+                                    <Button.Resources><Style TargetType="Border"><Setter Property="CornerRadius" Value="5"/></Style></Button.Resources>
+                                </Button>
+                            </StackPanel>
+                        </StackPanel>
+                    </GroupBox>
+
+                    <!-- Restaurant Applications -->
+                    <GroupBox Grid.Row="1" Margin="0,5,0,0">
+                        <GroupBox.Header>
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="Restaurant Applications" FontWeight="Bold" VerticalAlignment="Center" Margin="0,0,10,0"/>
+                                <ComboBox x:Name="cbRestAppFilter" Width="100"
+                                          SelectionChanged="cbRestAppFilter_SelectionChanged"/>
+                            </StackPanel>
+                        </GroupBox.Header>
+                        <StackPanel>
+                            <DataGrid x:Name="dgRestApps" Height="140" AutoGenerateColumns="False" IsReadOnly="True"
+                                      CanUserAddRows="False" SelectionMode="Single" SelectionChanged="dgRestApps_SelectionChanged">
+                                <DataGrid.Columns>
+                                    <DataGridTextColumn Header="ID" Binding="{Binding ApplicationId}" Width="40"/>
+                                    <DataGridTextColumn Header="User" Binding="{Binding User.FullName}" Width="120"/>
+                                    <DataGridTextColumn Header="Restaurant" Binding="{Binding RestaurantName}" Width="150"/>
+                                    <DataGridTextColumn Header="Address" Binding="{Binding Address}" Width="180"/>
+                                    <DataGridTextColumn Header="Status" Binding="{Binding Status}" Width="70"/>
+                                    <DataGridTextColumn Header="Submitted" Binding="{Binding SubmittedAt, StringFormat=dd/MM/yyyy}" Width="90"/>
+                                </DataGrid.Columns>
+                            </DataGrid>
+                            <StackPanel Orientation="Horizontal" Margin="0,5,0,0">
+                                <TextBlock Text="Note:" VerticalAlignment="Center" Margin="0,0,5,0"/>
+                                <TextBox x:Name="txtRestAppNote" Width="300" Margin="0,0,10,0"/>
+                                <Button Content="Approve" Width="80" Margin="0,0,5,0" Background="#27AE60" Foreground="White"
+                                        FontWeight="Bold" Click="btnApproveRestApp_Click">
+                                    <Button.Resources><Style TargetType="Border"><Setter Property="CornerRadius" Value="5"/></Style></Button.Resources>
+                                </Button>
+                                <Button Content="Reject" Width="80" Background="#E74C3C" Foreground="White"
+                                        FontWeight="Bold" Click="btnRejectRestApp_Click">
+                                    <Button.Resources><Style TargetType="Border"><Setter Property="CornerRadius" Value="5"/></Style></Button.Resources>
+                                </Button>
+                            </StackPanel>
+                        </StackPanel>
+                    </GroupBox>
+                </Grid>
+            </TabItem>
+
+        </TabControl>
     </Grid>
 </Window>

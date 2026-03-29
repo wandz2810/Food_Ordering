@@ -1,4 +1,4 @@
-﻿using Food_Ordering.Entities;
+using Food_Ordering.Entities;
 using Food_Ordering.shipper;
 using Microsoft.IdentityModel.Tokens;
 using System;
@@ -56,6 +56,9 @@ namespace Food_Ordering
                 switch (account.Role)
                 {
                     case "Admin":
+                        Food_Ordering.Admin.AdminWindow adminWindow = new Food_Ordering.Admin.AdminWindow(account);
+                        adminWindow.Show();
+                        this.Close();
                         break;
                     case "Customer":
                         MainWindow mainWindow = new MainWindow(account);
