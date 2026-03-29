@@ -151,6 +151,22 @@ namespace Food_Ordering
             }
             _DB.SaveChanges();
             MessageBox.Show("Register successfully!", "SUCCESS", MessageBoxButton.OK, MessageBoxImage.Information);
+            
+            // Switch to Login tab
+            TabControl tabControl = (TabControl)this.FindName("TabControl");
+            if (tabControl != null)
+            {
+                tabControl.SelectedIndex = 0; // 0 = Login tab, 1 = Register tab
+            }
+            
+            // Clear registration form fields
+            txtRegEmail.Clear();
+            txtRegPassword.Clear();
+            txtRegConfirmPassword.Clear();
+            txtRegFullname.Clear();
+            txtRegPhone.Clear();
+            txtLicensePlate.Clear();
+            txtRegAdress.Clear();
         }
 
         private void cbRegRole_SelectionChanged(object sender, SelectionChangedEventArgs e)

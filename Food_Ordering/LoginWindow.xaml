@@ -92,9 +92,7 @@
                        Margin="0,0,0,20"/>
 
             <!-- Tab Control -->
-            <TabControl BorderThickness="0"
-                        Background="Transparent"
-                        Padding="0">
+            <TabControl Name="LoginTabControl" BorderThickness="0" Background="Transparent" Padding="0" SelectedIndex="0">
 
                 <!-- ── LOGIN TAB ── -->
                 <TabItem Header="Login" Style="{StaticResource TabStyle}">
