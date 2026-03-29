@@ -47,6 +47,18 @@
             <StackPanel Margin="10">
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,0,0,10"/>
 
+                <Button x:Name="btnLogout" 
+                    Content="🚪 Đăng xuất" 
+                    Click="BtnLogout_Click" 
+                    Background="#E74C3C" Foreground="White" 
+                    Padding="10,5" FontWeight="Bold" Cursor="Hand">
+                    <Button.Resources>
+                        <Style TargetType="Border">
+                            <Setter Property="CornerRadius" Value="15"/>
+                        </Style>
+                    </Button.Resources>
+                </Button>
+
                 <Button Content="📜 Xem Lịch sử đơn hàng" 
                         Click="BtnHistory_Click"
                         Background="#95A5A6" Foreground="White" 
@@ -63,20 +75,29 @@
                 <TextBlock Text="🛒 Giỏ hàng của bạn" FontSize="18" FontWeight="Bold" Margin="0,0,0,10" Foreground="#2C3E50"/>
 
                 <DataGrid x:Name="dgCart" AutoGenerateColumns="False" Height="250" 
-                          CanUserAddRows="False" IsReadOnly="True" Background="White"
-                          BorderBrush="#DCDDE1" RowHeight="30">
+                CanUserAddRows="False" IsReadOnly="True" Background="White"
+                BorderBrush="#DCDDE1" RowHeight="40">
                     <DataGrid.Columns>
                         <DataGridTextColumn Header="Tên món" Binding="{Binding Name}" Width="*"/>
-                        <DataGridTextColumn Header="Giá" Binding="{Binding Price, StringFormat={}{0:N0}đ}" Width="100"/>
-                        <DataGridTemplateColumn Header="Tác vụ" Width="60">
+
+                        <DataGridTemplateColumn Header="Số lượng" Width="100">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
-                                    <Button Content="Xóa" 
-                                            Click="BtnRemove_Click" 
-                                            Background="#E74C3C" 
-                                            Foreground="White" 
-                                            FontSize="11"
-                                            Padding="2" Margin="2"/>
+                                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                                        <Button Content="-" Width="25" Height="25" Click="BtnDecrease_Click" Background="#BDC3C7" BorderThickness="0"/>
+                                        <TextBlock Text="{Binding Quantity}" VerticalAlignment="Center" Margin="8,0" FontWeight="Bold"/>
+                                        <Button Content="+" Width="25" Height="25" Click="BtnIncrease_Click" Background="#BDC3C7" BorderThickness="0"/>
+                                    </StackPanel>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+
+                        <DataGridTextColumn Header="Giá" Binding="{Binding Price, StringFormat={}{0:N0}đ}" Width="80"/>
+
+                        <DataGridTemplateColumn Header="Xóa" Width="50">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <Button Content="❌" Click="BtnRemove_Click" Background="Transparent" BorderThickness="0" Cursor="Hand"/>
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>

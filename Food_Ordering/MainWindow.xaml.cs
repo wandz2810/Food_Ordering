@@ -5,19 +5,23 @@ using System.Collections.ObjectModel;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
+using System.Windows.Controls;
 
 namespace Food_Ordering
 {
     public partial class MainWindow : Window
     {
-        // Khởi tạo Database Context và Giỏ hàng (ObservableCollection giúp UI tự cập nhật)
         private readonly FoodOrderingDbContext _context = new FoodOrderingDbContext();
         private ObservableCollection<FoodItem> _myCart = new ObservableCollection<FoodItem>();
+        private User _currentUser;
 
-        public MainWindow()
+        // Constructor duy nhất nhận User từ Login
+        public MainWindow(User user)
         {
             InitializeComponent();
-            // Kết nối DataGrid với danh sách giỏ hàng
+            _currentUser = user;
+
+            // Gán Source cho DataGrid ngay từ đầu
             dgCart.ItemsSource = _myCart;
         }
 
@@ -25,25 +29,26 @@ namespace Food_Ordering
         {
             try
             {
-
-                // Chỉ giữ lại việc load danh sách nhà hàng
-                cbRestaurants.ItemsSource = _context.Restaurants.Where(r => r.IsOpen).ToList();
+                // Lấy danh sách nhà hàng đang mở
+                var openRestaurants = _context.Restaurants.Where(r => r.IsOpen == true).ToList();
+                cbRestaurants.ItemsSource = openRestaurants;
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Lỗi khi tải dữ liệu: " + ex.Message);
+                MessageBox.Show("Lỗi khi tải danh sách nhà hàng: " + ex.Message, "Lỗi hệ thống");
             }
         }
 
-        private void CbRestaurants_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
+        private void CbRestaurants_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            // Khi chọn nhà hàng, hiển thị danh sách món ăn của nhà hàng đó
             if (cbRestaurants.SelectedItem is Restaurant selectedRest)
             {
+                // Load món ăn của nhà hàng được chọn
                 lbFoodItems.ItemsSource = _context.FoodItems
-                    .Where(f => f.RestaurantId == selectedRest.RestaurantId && f.IsAvailable).ToList();
+                    .Where(f => f.RestaurantId == selectedRest.RestaurantId && f.IsAvailable == true)
+                    .ToList();
 
-                // Lưu ý: Đổi nhà hàng sẽ xóa giỏ hàng cũ để tránh nhầm lẫn món giữa các quán
+                // Lưu ý quan trọng: Đổi nhà hàng là xóa sạch giỏ hàng cũ để tránh shipper đi 2 quán khác nhau
                 _myCart.Clear();
                 UpdateTotal();
             }
@@ -51,22 +56,61 @@ namespace Food_Ordering
 
         private void BtnAddToCart_Click(object sender, RoutedEventArgs e)
         {
-            // Thêm món được chọn từ ListBox vào giỏ hàng
             if (lbFoodItems.SelectedItem is FoodItem selected)
             {
-                _myCart.Add(selected);
+                // Kiểm tra xem món này có trong giỏ chưa
+                var itemInCart = _myCart.FirstOrDefault(x => x.FoodItemId == selected.FoodItemId);
+
+                if (itemInCart != null)
+                {
+                    itemInCart.Quantity++; // Tăng số lượng nếu đã tồn tại
+                }
+                else
+                {
+                    selected.Quantity = 1; // Mặc định là 1 cho món mới
+                    _myCart.Add(selected);
+                }
+
+                // Buộc DataGrid vẽ lại để hiện số lượng mới
+                dgCart.Items.Refresh();
                 UpdateTotal();
             }
             else
             {
-                MessageBox.Show("Vui lòng chọn một món ăn từ thực đơn!");
+                MessageBox.Show("Vui lòng chọn một món ăn trước!", "Nhắc nhở");
+            }
+        }
+
+        private void BtnIncrease_Click(object sender, RoutedEventArgs e)
+        {
+            if ((sender as Button)?.DataContext is FoodItem item)
+            {
+                item.Quantity++;
+                dgCart.Items.Refresh();
+                UpdateTotal();
+            }
+        }
+
+        private void BtnDecrease_Click(object sender, RoutedEventArgs e)
+        {
+            if ((sender as Button)?.DataContext is FoodItem item)
+            {
+                if (item.Quantity > 1)
+                {
+                    item.Quantity--;
+                }
+                else
+                {
+                    _myCart.Remove(item); // Về 0 thì bay màu khỏi giỏ hàng
+                }
+                dgCart.Items.Refresh();
+                UpdateTotal();
             }
         }
 
         private void BtnRemove_Click(object sender, RoutedEventArgs e)
         {
-            // Xóa món đang chọn khỏi DataGrid giỏ hàng
-            if (dgCart.SelectedItem is FoodItem selected)
+            if ((sender as Button)?.DataContext is FoodItem selected)
             {
                 _myCart.Remove(selected);
                 UpdateTotal();
@@ -75,51 +119,58 @@ namespace Food_Ordering
 
         private void UpdateTotal()
         {
-            // Tính tổng tiền và cập nhật lên giao diện
             if (txtTotal != null)
             {
-                txtTotal.Text = $"Tổng cộng: {_myCart.Sum(x => x.Price):N0} VNĐ";
+                // Tính tổng tiền dựa trên giá và số lượng
+                decimal total = _myCart.Sum(x => x.Price * x.Quantity);
+                txtTotal.Text = $"{total:N0} VNĐ";
             }
         }
 
-        // --- ĐOẠN LOGIC CHUYỂN QUA MÀN HÌNH XÁC NHẬN ---
         private void BtnCheckout_Click(object sender, RoutedEventArgs e)
         {
             if (_myCart.Count == 0)
             {
-                MessageBox.Show("Giỏ hàng đang trống!");
+                MessageBox.Show("Giỏ hàng của bạn đang trống. Hãy chọn món trước khi thanh toán!", "Thông báo");
                 return;
             }
 
-            // 1. Chuyển giỏ hàng thành List để truyền sang cửa sổ mới
+            // Truyền cả List và object User sang Checkout
             List<FoodItem> cartList = _myCart.ToList();
-
-            // 2. Khởi tạo CheckoutWindow (Sử dụng Constructor nhận List món ăn)
-            CheckoutWindow checkoutWin = new CheckoutWindow(cartList);
-
-            // 3. Căn giữa cửa sổ con theo cửa sổ chính
+            CheckoutWindow checkoutWin = new CheckoutWindow(cartList, _currentUser);
             checkoutWin.Owner = this;
-            checkoutWin.WindowStartupLocation = WindowStartupLocation.CenterOwner;
 
-            // 4. Mở dưới dạng Dialog (Chờ kết quả thanh toán)
             if (checkoutWin.ShowDialog() == true)
             {
-                // Nếu thanh toán thành công (DialogResult = true), xóa sạch giỏ hàng
+                // Nếu thanh toán xong thì dọn sạch giỏ hàng
                 _myCart.Clear();
                 UpdateTotal();
 
-                // Gợi ý: Tự động mở lịch sử để khách theo dõi đơn hàng
+                // Mở lịch sử đơn hàng tự động để khách xem
                 BtnHistory_Click(null, null);
             }
         }
 
-        // --- MỞ MÀN HÌNH LỊCH SỬ ĐƠN HÀNG ---
         private void BtnHistory_Click(object sender, RoutedEventArgs e)
         {
-            HistoryWindow historyWin = new HistoryWindow();
+            // Truyền User sang để HistoryWindow biết lọc đơn hàng của ai
+            HistoryWindow historyWin = new HistoryWindow(_currentUser);
             historyWin.Owner = this;
-            historyWin.WindowStartupLocation = WindowStartupLocation.CenterOwner;
             historyWin.ShowDialog();
+        }
+
+        private void BtnLogout_Click(object sender, RoutedEventArgs e)
+        {
+            MessageBoxResult result = MessageBox.Show("Bạn có muốn đăng xuất?", "Xác nhận", MessageBoxButton.YesNo);
+            if (result == MessageBoxResult.Yes)
+            {
+                // Mở lại Login
+                LoginWindow loginWin = new LoginWindow();
+                loginWin.Show();
+
+                // QUAN TRỌNG: Đóng chính nó (MainWindow)
+                this.Close();
+            }
         }
     }
 }
