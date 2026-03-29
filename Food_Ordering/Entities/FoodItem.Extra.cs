@@ -1,12 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Food_Ordering.Entities
+﻿namespace Food_Ordering.Entities
 {
-    public class FoodItem
+    public partial class FoodItem
     {
+        public int Quantity { get; set; } = 1;
     }
 }

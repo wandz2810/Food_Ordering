@@ -25,8 +25,6 @@ public partial class FoodItem
 
     public int DailyQuantityUsed { get; set; }
 
-    public int Quantity { get; set; } = 1;
-
     public DateOnly? QuantityResetDate { get; set; }
 
     public virtual ICollection<CartItem> CartItems { get; set; } = new List<CartItem>();

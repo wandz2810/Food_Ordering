@@ -9,7 +9,6 @@ namespace Food_Ordering
     /// </summary>
     public partial class App : Application
     {
-        public static int CurrentUserId { get; set; }
     }
 
 }
