@@ -6,8 +6,8 @@
         xmlns:local="clr-namespace:Food_Ordering"
         mc:Ignorable="d"
         ResizeMode ="NoResize"
-        Title="Login" Height="700" Width="800">
-        
+        Title="Login" Height="900" Width="800">
+
     <Window.Resources>
         <!-- Primary Button Style -->
         <Style x:Key="PrimaryButtonStyle" TargetType="Button">
@@ -148,8 +148,26 @@
                                  Margin="0,0,0,14"/>
 
                         <TextBlock Text="Register as" FontSize="12" Foreground="#555555" Margin="0,0,0,4"/>
-                        <ComboBox Name="cbRegRole" FontSize="24" Margin="0, 0, 0,24">
+                        <ComboBox Name="cbRegRole" FontSize="24" Margin="0, 0, 0,24" SelectionChanged="cbRegRole_SelectionChanged">
                         </ComboBox>
+
+                        <GroupBox Name="grCustomer" Visibility="Hidden">
+                            <StackPanel>
+                                <TextBlock Text="Address" FontSize="12" Foreground="#555555" Margin="0,0,0,4"/>
+                                <TextBox x:Name="txtRegAdress"
+                                     Style="{StaticResource InputStyle}"
+                                     Margin="0,0,0,14"/>
+                            </StackPanel>
+                        </GroupBox>
+
+                        <GroupBox Name="grShipper" Visibility="Hidden">
+                            <StackPanel>
+                                <TextBlock Text="License Plate" FontSize="12" Foreground="#555555" Margin="0,0,0,4"/>
+                                <TextBox x:Name="txtLicensePlate"
+                                    Style="{StaticResource InputStyle}"
+                                    Margin="0,0,0,14"/>
+                            </StackPanel>
+                        </GroupBox>
 
                         <Button Content="Register"
                                 Style="{StaticResource PrimaryButtonStyle}"

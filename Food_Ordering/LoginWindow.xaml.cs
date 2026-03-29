@@ -1,4 +1,5 @@
 ﻿using Food_Ordering.Entities;
+using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Text;
 using System.Windows;
@@ -27,7 +28,7 @@ namespace Food_Ordering
             List<string> list = new();
             list.Add("Customer");
             list.Add("Shipper");
-            list.Add("Restaurant");
+            list.Add("RestaurantOwner");
             cbRegRole.ItemsSource = list;
             cbRegRole.SelectedIndex = 0;
         }
@@ -61,7 +62,7 @@ namespace Food_Ordering
                     case "Shipper":
 
                         break;
-                    case "Restaurant":
+                    case "RestaurantOwner":
 
                         break;
                 }
@@ -76,47 +77,99 @@ namespace Food_Ordering
 
         private void btnRegister_Click(object sender, RoutedEventArgs e)
         {
-            if (txtRegEmail == null)
+            if (txtRegEmail.Text.IsNullOrEmpty())
             {
                 MessageBox.Show("Email cannot empty!", "ERROR", MessageBoxButton.OK, MessageBoxImage.Error);
                 return;
             }
 
-            if (txtRegPassword == null)
+            if (txtRegPassword.Password.IsNullOrEmpty())
             {
-                MessageBox.Show("Email cannot empty!", "ERROR", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show("password cannot empty!", "ERROR", MessageBoxButton.OK, MessageBoxImage.Error);
                 return;
             }
 
-            if (txtRegConfirmPassword == null)
+            if (txtRegConfirmPassword.Password.IsNullOrEmpty())
             {
-                MessageBox.Show("Email cannot empty!", "ERROR", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show("Need to confirm password", "ERROR", MessageBoxButton.OK, MessageBoxImage.Error);
                 return;
             }
 
-            if (!txtRegPassword.Equals(txtRegConfirmPassword))
+            if (!(txtRegPassword.Password.Equals(txtRegConfirmPassword.Password)))
             {
-                MessageBox.Show("Email cannot empty!", "ERROR", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show("Password is not the same", "ERROR", MessageBoxButton.OK, MessageBoxImage.Error);
                 return;
             }
 
-            if (txtRegPhone == null)
+            if (txtRegPhone.Text.IsNullOrEmpty())
             {
-                MessageBox.Show("Email cannot empty!", "ERROR", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show("Phone number cannot empty!", "ERROR", MessageBoxButton.OK, MessageBoxImage.Error);
                 return;
             }
 
             var account = new User
             {
                 Email = txtRegEmail.Text,
-                PasswordHash = txtRegPassword.ToString(),
+                PasswordHash = txtRegPassword.Password,
                 FullName = txtRegFullname.Text,
                 PhoneNumber = txtRegPhone.Text,
-                Status = "Available",
+                Status = "Active",
                 Role = (string)cbRegRole.SelectedItem,
                 CreatedAt = DateTime.Now,
             };
 
+            _DB.Users.Add(account);
+            _DB.SaveChanges();
+
+            switch (account.Role)
+            {
+                case "Customer":
+                    var customer = new Customer
+                    {
+                        CustomerId = account.UserId,
+                        Address = txtRegAdress.Text,
+                    };
+                    _DB.Customers.Add(customer);
+                    break;
+                case "Shipper":
+                    var shipper = new Shipper
+                    {
+                        ShipperId = account.UserId,
+                        VehicleType = "motorbike",
+                        LicensePlate = txtLicensePlate.Text,
+                        IsAvailable = true,
+                    };
+                    _DB.Shippers.Add(shipper);
+                    break;
+                case "RestaurantOwner":
+                    var restaurantOwner = new RestaurantOwner
+                    {
+                        OwnerId = account.UserId,
+                    };
+                    _DB.Add(restaurantOwner);
+                    break;
+            }
+            _DB.SaveChanges();
+            MessageBox.Show("Register successfully!", "SUCCESS", MessageBoxButton.OK, MessageBoxImage.Information);
+        }
+
+        private void cbRegRole_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            switch ((string)cbRegRole.SelectedItem)
+            {
+                case "Customer":
+                    grShipper.Visibility = Visibility.Collapsed;
+                    grCustomer.Visibility = Visibility.Visible;
+                    break;
+                case "Shipper":
+                    grCustomer.Visibility = Visibility.Collapsed;
+                    grShipper.Visibility = Visibility.Visible;
+                    break;
+                default:
+                    grCustomer.Visibility = Visibility.Collapsed;
+                    grShipper.Visibility = Visibility.Collapsed;
+                    return;
+            }
         }
     }
 }
