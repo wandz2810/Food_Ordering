@@ -16,6 +16,10 @@ public partial class FoodOrderingDbContext : DbContext
     {
     }
 
+    public FoodOrderingDbContext()
+    {
+    }
+
     public virtual DbSet<Cart> Carts { get; set; }
 
     public virtual DbSet<CartItem> CartItems { get; set; }

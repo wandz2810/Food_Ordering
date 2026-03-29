@@ -1,0 +1,129 @@
+﻿<Window x:Class="Food_Ordering.shipper.shipperAccept"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Food_Ordering.shipper"
+        mc:Ignorable="d"
+        Title="shipperAccept" Height="500" Width="700"
+        WindowStartupLocation="CenterScreen">
+
+    <Grid Background="#F5F5F5" Margin="15">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="20"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="20"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <!-- Tiêu đề -->
+        <TextBlock Grid.Row="0"
+                   Text="Order Details"
+                   FontSize="24"
+                   FontWeight="Bold"
+                   HorizontalAlignment="Center"
+                   Margin="0,0,0,10"/>
+
+        <!-- Border hiển thị đơn hàng -->
+        <Border Grid.Row="2"
+                Background="White"
+                BorderBrush="#CCCCCC"
+                BorderThickness="1.5"
+                CornerRadius="10"
+                Padding="20">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="15"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="15"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="15"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="15"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="15"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="140"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+
+                <TextBlock Grid.Row="0" Grid.Column="0"
+                           Text="Order ID:"
+                           FontWeight="SemiBold"
+                           VerticalAlignment="Center"/>
+                <TextBlock x:Name="txtOrderId"
+                           Grid.Row="0" Grid.Column="1"
+                           Text=""/>
+
+                <TextBlock Grid.Row="2" Grid.Column="0"
+                           Text="Restaurant ID:"
+                           FontWeight="SemiBold"
+                           VerticalAlignment="Center"/>
+                <TextBlock x:Name="txtRestaurantId"
+                           Grid.Row="2" Grid.Column="1"
+                           Text=""/>
+
+                <TextBlock Grid.Row="4" Grid.Column="0"
+                           Text="Total Amount:"
+                           FontWeight="SemiBold"
+                           VerticalAlignment="Center"/>
+                <TextBlock x:Name="txtTotalAmount"
+                           Grid.Row="4" Grid.Column="1"
+                           Text=""/>
+
+                <TextBlock Grid.Row="6" Grid.Column="0"
+                           Text="Delivery Address:"
+                           FontWeight="SemiBold"
+                           VerticalAlignment="Top"/>
+                <TextBlock x:Name="txtDeliveryAddress"
+                           Grid.Row="6" Grid.Column="1"
+                           TextWrapping="Wrap"
+                           Text=""/>
+
+                <TextBlock Grid.Row="8" Grid.Column="0"
+                           Text="Note:"
+                           FontWeight="SemiBold"
+                           VerticalAlignment="Top"/>
+                <TextBlock x:Name="txtNote"
+                           Grid.Row="8" Grid.Column="1"
+                           TextWrapping="Wrap"
+                           Text=""/>
+
+                <TextBlock Grid.Row="10" Grid.Column="0"
+                           Text="Status:"
+                           FontWeight="SemiBold"
+                           VerticalAlignment="Center"/>
+                <TextBlock x:Name="txtStatus"
+                           Grid.Row="10" Grid.Column="1"
+                           Text=""
+                           FontWeight="Bold"/>
+            </Grid>
+        </Border>
+
+        <!-- Khu vực nút -->
+        <StackPanel Grid.Row="4"
+                    Orientation="Horizontal"
+                    HorizontalAlignment="Center">
+
+            <Button x:Name="btnPickedUp"
+                    Content="Đã lấy hàng"
+                    Width="120"
+                    Height="35"
+                    Margin="5"
+                    Click="btnPickedUp_Click"/>
+
+            <Button x:Name="btnDelivered"
+                    Content="Đã giao"
+                    Width="120"
+                    Height="35"
+                    Margin="5"
+                    Visibility="Collapsed"
+                    Click="btnDelivered_Click"/>
+        </StackPanel>
+    </Grid>
+</Window>

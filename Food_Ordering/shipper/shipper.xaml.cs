@@ -1,88 +1,96 @@
 ﻿using Food_Ordering.Entities;
 using Microsoft.Extensions.Configuration;
 using System;
-using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 
 namespace Food_Ordering.shipper
 {
-
-    public partial class shipper : Window
+    public partial class Shipper : Window
     {
+        private readonly string _connectionString;
+        private User? _currentAccount;
 
-        private readonly string _connectionString = string.Empty;
-        private int _selectedEmployeeId = 0;
-        public shipper()
+        public Shipper()
         {
             InitializeComponent();
             _connectionString = GetConnectionString();
-            LoadEmployees();        }
+            LoadOrders();
+        }
 
+        public Shipper(User currentAccount)
+        {
+            InitializeComponent();
+            _connectionString = GetConnectionString();
+            _currentAccount = currentAccount;
+            LoadOrders();
+        }
 
         private string GetConnectionString()
         {
             IConfiguration configuration = new ConfigurationBuilder()
-                .SetBasePath(Directory.GetCurrentDirectory())
+                .SetBasePath(AppContext.BaseDirectory)
                 .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
                 .Build();
 
-            return configuration.GetConnectionString("DefaultConnection")!;
+            string? connectionString = configuration.GetConnectionString("DefaultConnection");
+
+            if (string.IsNullOrWhiteSpace(connectionString))
+            {
+                throw new Exception("DefaultConnection not found in appsettings.json");
+            }
+
+            return connectionString;
         }
 
-
-         
-
-        private void LoadEmployees()
+        private void LoadOrders()
         {
-            using FoodOrderingDbContext context = new FoodOrderingDbContext(_connectionString);
+            using FoodOrderingDbContext context = new FoodOrderingDbContext();
+
             dgOrders.ItemsSource = context.Orders
-                                             .OrderBy(e => e.OrderId)
-                                             .ToList();
-        }
-
-
-
-        private void ClearInput()
-        {
-            txtOrderId.Text = string.Empty;
-            txtRestaurantId.Text = string.Empty;
-            txtTotalAmount.Text = string.Empty;
-            txtDeliveryAddress.Text = string.Empty;
-            txtNote.Text = string.Empty;
-
-            dgOrders.SelectedIndex = -1;
+                                          .OrderBy(o => o.OrderId)
+                                          .ToList();
         }
 
         private void dgOrders_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if (dgOrders.SelectedItem == null)
+            if (dgOrders.SelectedItem is not Order selectedOrder)
             {
-                ClearInput();
                 return;
             }
 
-            dynamic selectedOrder = dgOrders.SelectedItem;
+            txtOrderId.Text = selectedOrder.OrderId.ToString();
+            txtRestaurantId.Text = selectedOrder.RestaurantId.ToString();
+            txtTotalAmount.Text = selectedOrder.TotalAmount.ToString();
+            txtDeliveryAddress.Text = selectedOrder.DeliveryAddress ?? "";
+            txtNote.Text = selectedOrder.Note ?? "";
+        }
 
-            txtOrderId.Text = selectedOrder.OrderId?.ToString() ?? "";
-            txtRestaurantId.Text = selectedOrder.RestaurantId?.ToString() ?? "";
-            txtTotalAmount.Text = selectedOrder.TotalAmount?.ToString() ?? "";
-            txtDeliveryAddress.Text = selectedOrder.DeliveryAddress?.ToString() ?? "";
-            txtNote.Text = selectedOrder.Note?.ToString() ?? "";
+        private void btnReceive_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                if (string.IsNullOrWhiteSpace(txtOrderId.Text))
+                {
+                    MessageBox.Show("Please select order!!");
+                    return;
+                }
+
+                if (!int.TryParse(txtOrderId.Text, out int orderId))
+                {
+                    MessageBox.Show("OrderId is invalid.");
+                    return;
+                }
+
+                shipperAccept acceptWindow = new shipperAccept(orderId);
+                acceptWindow.Show();
+                this.Hide();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error: " + ex.Message);
+            }
         }
     }
-
-
-
-
 }
