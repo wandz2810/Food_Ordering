@@ -1,4 +1,5 @@
 ﻿using Food_Ordering.Entities;
+using Food_Ordering.shipper;
 using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Text;
@@ -55,16 +56,21 @@ namespace Food_Ordering
                 switch (account.Role)
                 {
                     case "Admin":
-                        MainWindow mainWindow = new MainWindow(account);
                         break;
                     case "Customer":
-                        
+                        MainWindow mainWindow = new MainWindow(account);
+                        mainWindow.Show();
+                        this.Close();
                         break;
                     case "Shipper":
-
+                        Food_Ordering.shipper.Shipper shipper = new Food_Ordering.shipper.Shipper(account);
+                        shipper.Show();
+                        this.Close();
                         break;
                     case "RestaurantOwner":
-
+                        RestaurantWindow restaurantWindow = new RestaurantWindow(account);
+                        restaurantWindow.Show();
+                        this.Close();
                         break;
                 }
             }
@@ -133,7 +139,7 @@ namespace Food_Ordering
                     _DB.Customers.Add(customer);
                     break;
                 case "Shipper":
-                    var shipper = new Shipper
+                    var shipper = new Food_Ordering.Entities.Shipper
                     {
                         ShipperId = account.UserId,
                         VehicleType = "motorbike",
