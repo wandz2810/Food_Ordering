@@ -9,14 +9,16 @@ namespace Food_Ordering
     {
         private readonly RestaurantOwnerService service;
         private int currentRestaurantId = 0; // resolved từ OwnerId
+        private User _currentUser; // có thể dùng để hiển thị thông tin user hoặc kiểm tra quyền
 
-        public RestaurantWindow()
+        public RestaurantWindow(User user)
         {
             InitializeComponent();
-            service = new RestaurantOwnerService();
+            service = new RestaurantOwnerService(user);
 
             // Tự động thử load nhà hàng của user hiện tại (nếu App.CurrentUserId đã được set)
             InitializeOwnerContext();
+            _currentUser = user;
         }
 
         // Tìm và khởi tạo context nhà hàng theo ownerId (nếu ownerId == null thì dùng App.CurrentUserId)
