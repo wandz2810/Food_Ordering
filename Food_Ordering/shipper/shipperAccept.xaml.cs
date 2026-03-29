@@ -37,19 +37,19 @@ namespace Food_Ordering.shipper
                 txtNote.Text = string.IsNullOrWhiteSpace(order.Note) ? "No note" : order.Note;
                 txtStatus.Text = order.Status;
 
-                if (order.Status == "PickedUp")
+                if (order.Status == "WaitingShipper")
+                {
+                    btnPickedUp.Visibility = Visibility.Visible;
+                    btnDelivered.Visibility = Visibility.Collapsed;
+                }
+                else if (order.Status == "PickedUp")
                 {
                     btnPickedUp.Visibility = Visibility.Collapsed;
                     btnDelivered.Visibility = Visibility.Visible;
                 }
-                else if (order.Status == "Delivered")
-                {
-                    btnPickedUp.Visibility = Visibility.Collapsed;
-                    btnDelivered.Visibility = Visibility.Collapsed;
-                }
                 else
                 {
-                    btnPickedUp.Visibility = Visibility.Visible;
+                    btnPickedUp.Visibility = Visibility.Collapsed;
                     btnDelivered.Visibility = Visibility.Collapsed;
                 }
             }
@@ -70,6 +70,12 @@ namespace Food_Ordering.shipper
                 if (order == null)
                 {
                     MessageBox.Show("Order not found.");
+                    return;
+                }
+
+                if (order.Status != "WaitingShipper")
+                {
+                    MessageBox.Show("Chỉ đơn hàng có trạng thái WaitingShipper mới được lấy hàng.");
                     return;
                 }
 
@@ -102,13 +108,13 @@ namespace Food_Ordering.shipper
                     return;
                 }
 
-                if (order.Status != "Shipping")
+                if (order.Status != "PickedUp")
                 {
-                    MessageBox.Show("Đơn hàng chưa ở trạng thái đang giao.");
+                    MessageBox.Show("Chỉ đơn hàng đã lấy hàng mới được giao thành công.");
                     return;
                 }
 
-                order.Status = "Completed";
+                order.Status = "complete";
                 context.SaveChanges();
 
                 MessageBox.Show("Giao hàng thành công.");

@@ -86,6 +86,12 @@
                          Width="90"
                          Margin="5"
                         Click="btnReceive_Click"/>
+
+                    <Button x:Name="btnLogout"
+                    Content="Logout"
+                    Width="90"
+                    Margin="5"
+                    Click="btnLogout_Click"/>
                 </StackPanel>
             </Grid>
         </Border>

@@ -106,5 +106,13 @@ namespace Food_Ordering.shipper
                 MessageBox.Show("Error: " + ex.Message);
             }
         }
+
+        private void btnLogout_Click(object sender, RoutedEventArgs e)
+        {
+            LoginWindow loginWindow = new LoginWindow();
+            loginWindow.Show();
+            this.Close();
+        }
+
     }
 }
