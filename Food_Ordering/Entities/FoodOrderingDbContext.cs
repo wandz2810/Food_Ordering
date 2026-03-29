@@ -7,7 +7,7 @@ namespace Food_Ordering.Entities;
 
 public partial class FoodOrderingDbContext : DbContext
 {
-    public FoodOrderingDbContext()
+    public FoodOrderingDbContext(string connectionString)
     {
     }
 
