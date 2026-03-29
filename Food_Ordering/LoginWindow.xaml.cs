@@ -35,29 +35,30 @@ namespace Food_Ordering
 
         private void btnLogin_Click(object sender, RoutedEventArgs e)
         {
-            if (txtEmail == null)
+            if (txtEmail.Text.IsNullOrEmpty())
             {
                 MessageBox.Show("Email cannot empty!", "ERROR", MessageBoxButton.OK, MessageBoxImage.Error);
                 return;
             }
 
-            if (txtPassword == null)
+            if (txtPassword.Password.IsNullOrEmpty())
             {
                 MessageBox.Show("Please enter password!", "ERROR", MessageBoxButton.OK, MessageBoxImage.Error);
                 return;
             }
 
             var account = _DB.Users.FirstOrDefault(x => x.Email.ToLower().Equals(txtEmail.Text.ToLower())
-                                                    && x.PasswordHash.Equals(txtPassword));
+                                                    && x.PasswordHash.Equals(txtPassword.Password));
+
             if (account != null)
             {
                 switch (account.Role)
                 {
                     case "Admin":
-
+                        MainWindow mainWindow = new MainWindow(account);
                         break;
                     case "Customer":
-
+                        
                         break;
                     case "Shipper":
 

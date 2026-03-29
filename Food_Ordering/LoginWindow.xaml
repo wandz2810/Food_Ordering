@@ -84,7 +84,7 @@
         <StackPanel>
 
             <!-- App Title -->
-            <TextBlock Text="My Application"
+            <TextBlock Text="Đăng nhập"
                        FontSize="22"
                        FontWeight="Bold"
                        Foreground="#222222"
@@ -95,7 +95,7 @@
             <TabControl Name="LoginTabControl" BorderThickness="0" Background="Transparent" Padding="0" SelectedIndex="0">
 
                 <!-- ── LOGIN TAB ── -->
-                <TabItem Header="Login" Style="{StaticResource TabStyle}">
+                <TabItem Header="Đăng nhập" Style="{StaticResource TabStyle}">
                     <StackPanel Margin="0,24,0,0">
 
                         <TextBlock Text="Email" FontSize="12" Foreground="#555555" Margin="0,0,0,4"/>
@@ -103,7 +103,7 @@
                                  Style="{StaticResource InputStyle}"
                                  Margin="0,0,0,14"/>
 
-                        <TextBlock Text="Password" FontSize="12" Foreground="#555555" Margin="0,0,0,4"/>
+                        <TextBlock Text="Mật khẩu" FontSize="12" Foreground="#555555" Margin="0,0,0,4"/>
                         <PasswordBox x:Name="txtPassword"
                                      Style="{StaticResource InputStyle}"
                                      Margin="0,0,0,24"/>
@@ -116,7 +116,7 @@
                 </TabItem>
 
                 <!-- ── REGISTER TAB ── -->
-                <TabItem Header="Register" Style="{StaticResource TabStyle}">
+                <TabItem Header="Đăng ký" Style="{StaticResource TabStyle}">
                     <StackPanel Margin="0,24,0,0">
 
                         <TextBlock Text="Email" FontSize="12" Foreground="#555555" Margin="0,0,0,4"/>
@@ -124,7 +124,7 @@
                                  Style="{StaticResource InputStyle}"
                                  Margin="0,0,0,14"/>
 
-                        <TextBlock Text="Password" FontSize="12" Foreground="#555555" Margin="0,0,0,4"/>
+                        <TextBlock Text="Mật khẩu" FontSize="12" Foreground="#555555" Margin="0,0,0,4"/>
                         <PasswordBox x:Name="txtRegPassword"
                                      Style="{StaticResource InputStyle}"
                                      Margin="0,0,0,14"/>
