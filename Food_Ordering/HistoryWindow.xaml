@@ -1,0 +1,41 @@
+﻿<Window x:Class="Food_Ordering.HistoryWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Lịch Sử Đơn Hàng" Height="500" Width="800" Loaded="Window_Loaded">
+    <Grid Margin="20">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="1*"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="150"/>
+        </Grid.RowDefinitions>
+
+        <TextBlock Text="ĐƠN HÀNG ĐÃ ĐẶT" FontSize="20" FontWeight="Bold" Margin="0,0,0,10"/>
+
+        <DataGrid Grid.Row="1" x:Name="dgOrders" AutoGenerateColumns="False" 
+                  CanUserAddRows="False" IsReadOnly="True" 
+                  SelectionChanged="DgOrders_SelectionChanged">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Mã Đơn" Binding="{Binding OrderId}" Width="60"/>
+                <DataGridTextColumn Header="Ngày đặt" Binding="{Binding CreatedAt, StringFormat=\{0:dd/MM/yyyy HH:mm\}}" Width="150"/>
+                <DataGridTextColumn Header="Tổng tiền" Binding="{Binding TotalAmount, StringFormat=\{0:N0\}đ}" Width="100"/>
+                <DataGridTextColumn Header="Trạng thái" Binding="{Binding Status}" Width="120"/>
+                <DataGridTextColumn Header="Địa chỉ" Binding="{Binding DeliveryAddress}" Width="*"/>
+            </DataGrid.Columns>
+        </DataGrid>
+
+        <TextBlock Grid.Row="2" Text="CHI TIẾT MÓN ĂN" FontWeight="Bold" Margin="0,15,0,5"/>
+
+        <ListBox Grid.Row="3" x:Name="lbOrderDetails">
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <StackPanel Orientation="Horizontal" Margin="5">
+                        <TextBlock Text="{Binding FoodName}" Width="250" FontWeight="SemiBold"/>
+                        <TextBlock Text="{Binding Quantity, StringFormat='x\{0\}'}" Width="50"/>
+                        <TextBlock Text="{Binding FoodPrice, StringFormat=\{0:N0\}đ}" Foreground="Green"/>
+                    </StackPanel>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
+    </Grid>
+</Window>
