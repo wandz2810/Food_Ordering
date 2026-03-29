@@ -1,7 +1,6 @@
 ﻿using Food_Ordering.Entities;
 using Microsoft.Extensions.Configuration;
 using System;
-using System.IO;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
@@ -11,11 +10,20 @@ namespace Food_Ordering.shipper
     public partial class Shipper : Window
     {
         private readonly string _connectionString;
+        private User? _currentAccount;
 
         public Shipper()
         {
             InitializeComponent();
             _connectionString = GetConnectionString();
+            LoadOrders();
+        }
+
+        public Shipper(User currentAccount)
+        {
+            InitializeComponent();
+            _connectionString = GetConnectionString();
+            _currentAccount = currentAccount;
             LoadOrders();
         }
 
@@ -38,20 +46,11 @@ namespace Food_Ordering.shipper
 
         private void LoadOrders()
         {
-            using FoodOrderingDbContext context = new FoodOrderingDbContext(_connectionString);
-            dgOrders.ItemsSource = context.Orders
-                                          .OrderBy(e => e.OrderId)
-                                          .ToList();
-        }
+            using FoodOrderingDbContext context = new FoodOrderingDbContext();
 
-        private void ClearInput()
-        {
-            txtOrderId.Text = string.Empty;
-            txtRestaurantId.Text = string.Empty;
-            txtTotalAmount.Text = string.Empty;
-            txtDeliveryAddress.Text = string.Empty;
-            txtNote.Text = string.Empty;
-            dgOrders.SelectedIndex = -1;
+            dgOrders.ItemsSource = context.Orders
+                                          .OrderBy(o => o.OrderId)
+                                          .ToList();
         }
 
         private void dgOrders_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -64,8 +63,34 @@ namespace Food_Ordering.shipper
             txtOrderId.Text = selectedOrder.OrderId.ToString();
             txtRestaurantId.Text = selectedOrder.RestaurantId.ToString();
             txtTotalAmount.Text = selectedOrder.TotalAmount.ToString();
-            txtDeliveryAddress.Text = selectedOrder.DeliveryAddress ?? string.Empty;
-            txtNote.Text = selectedOrder.Note ?? string.Empty;
+            txtDeliveryAddress.Text = selectedOrder.DeliveryAddress ?? "";
+            txtNote.Text = selectedOrder.Note ?? "";
+        }
+
+        private void btnReceive_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                if (string.IsNullOrWhiteSpace(txtOrderId.Text))
+                {
+                    MessageBox.Show("Please select order!!");
+                    return;
+                }
+
+                if (!int.TryParse(txtOrderId.Text, out int orderId))
+                {
+                    MessageBox.Show("OrderId is invalid.");
+                    return;
+                }
+
+                shipperAccept acceptWindow = new shipperAccept(orderId);
+                acceptWindow.Show();
+                this.Hide();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error: " + ex.Message);
+            }
         }
     }
 }
