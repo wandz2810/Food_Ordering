@@ -12,8 +12,6 @@ namespace Food_Ordering
         // ID user hiện tại (set khi login). Mặc định 0 = chưa login.
         public static int CurrentUserId { get; set; } = 0;
 
-        // (optional) connection string holder
-        public static string? ConnectionString { get; set; }
     }
 
 }
