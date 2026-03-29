@@ -1,6 +1,7 @@
 ﻿using Food_Ordering.Entities;
 using Microsoft.Extensions.Configuration;
 using System;
+using System.ComponentModel;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
@@ -9,12 +10,16 @@ namespace Food_Ordering.shipper
 {
     public partial class Shipper : Window
     {
-        private readonly string _connectionString;
+        private readonly string _connectionString = string.Empty;
         private User? _currentAccount;
 
         public Shipper()
         {
             InitializeComponent();
+
+            if (DesignerProperties.GetIsInDesignMode(new DependencyObject()))
+                return;
+
             _connectionString = GetConnectionString();
             LoadOrders();
         }
@@ -22,6 +27,10 @@ namespace Food_Ordering.shipper
         public Shipper(User currentAccount)
         {
             InitializeComponent();
+
+            if (DesignerProperties.GetIsInDesignMode(new DependencyObject()))
+                return;
+
             _connectionString = GetConnectionString();
             _currentAccount = currentAccount;
             LoadOrders();
@@ -46,19 +55,24 @@ namespace Food_Ordering.shipper
 
         private void LoadOrders()
         {
-            using FoodOrderingDbContext context = new FoodOrderingDbContext();
+            try
+            {
+                using FoodOrderingDbContext context = new FoodOrderingDbContext();
 
-            dgOrders.ItemsSource = context.Orders
-                                          .OrderBy(o => o.OrderId)
-                                          .ToList();
+                dgOrders.ItemsSource = context.Orders
+                                              .OrderBy(o => o.OrderId)
+                                              .ToList();
+            }
+            catch
+            {
+                dgOrders.ItemsSource = null;
+            }
         }
 
         private void dgOrders_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (dgOrders.SelectedItem is not Order selectedOrder)
-            {
                 return;
-            }
 
             txtOrderId.Text = selectedOrder.OrderId.ToString();
             txtRestaurantId.Text = selectedOrder.RestaurantId.ToString();
