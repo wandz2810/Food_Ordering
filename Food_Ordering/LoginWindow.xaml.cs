@@ -26,11 +26,6 @@ namespace Food_Ordering
         {
             InitializeComponent();
             _DB = new();
-            List<string> list = new();
-            list.Add("Customer");
-            list.Add("Shipper");
-            list.Add("RestaurantOwner");
-            cbRegRole.ItemsSource = list;
             cbRegRole.SelectedIndex = 0;
         }
 
@@ -124,7 +119,7 @@ namespace Food_Ordering
                 FullName = txtRegFullname.Text,
                 PhoneNumber = txtRegPhone.Text,
                 Status = "Active",
-                Role = (string)cbRegRole.SelectedItem,
+                Role = cbRegRole.SelectedIndex == 0 ? "Customer" : cbRegRole.SelectedIndex == 1 ? "Shipper" : "RestaurantOwner",
                 CreatedAt = DateTime.Now,
             };
 
@@ -161,14 +156,14 @@ namespace Food_Ordering
             }
             _DB.SaveChanges();
             MessageBox.Show("Register successfully!", "SUCCESS", MessageBoxButton.OK, MessageBoxImage.Information);
-            
+
             // Switch to Login tab
             TabControl tabControl = (TabControl)this.FindName("TabControl");
             if (tabControl != null)
             {
                 tabControl.SelectedIndex = 0; // 0 = Login tab, 1 = Register tab
             }
-            
+
             // Clear registration form fields
             txtRegEmail.Clear();
             txtRegPassword.Clear();
@@ -181,13 +176,13 @@ namespace Food_Ordering
 
         private void cbRegRole_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            switch ((string)cbRegRole.SelectedItem)
+            switch (cbRegRole.SelectedIndex)
             {
-                case "Customer":
+                case 0:
                     grShipper.Visibility = Visibility.Collapsed;
                     grCustomer.Visibility = Visibility.Visible;
                     break;
-                case "Shipper":
+                case 1:
                     grCustomer.Visibility = Visibility.Collapsed;
                     grShipper.Visibility = Visibility.Visible;
                     break;

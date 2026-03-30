@@ -147,6 +147,10 @@
 
                         <TextBlock Text="đăng ký với tư cách" FontSize="12" Foreground="#555555" Margin="0,0,0,4"/>
                         <ComboBox Name="cbRegRole" FontSize="24" Margin="0, 0, 0,24" SelectionChanged="cbRegRole_SelectionChanged">
+                            <ComboBoxItem Content="Khách Hàng" Tag="Customer"/>
+                            <ComboBoxItem Content="Shipper" Tag="Shipper"/>
+                            <ComboBoxItem Content="Chủ cửa hàng" Tag="restaurant"/>
+                            
                         </ComboBox>
 
                         <GroupBox Name="grCustomer" Visibility="Hidden">
