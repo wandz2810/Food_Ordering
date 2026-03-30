@@ -19,6 +19,8 @@ namespace Food_Ordering
             // Tự động thử load nhà hàng của user hiện tại (nếu App.CurrentUserId đã được set)
             InitializeOwnerContext();
             _currentUser = user;
+            currentRestaurantId = service.GetRestaurant(user.UserId)?.RestaurantId ?? 0;
+            LoadMenu();
         }
 
         // Tìm và khởi tạo context nhà hàng theo ownerId (nếu ownerId == null thì dùng App.CurrentUserId)
@@ -75,22 +77,22 @@ namespace Food_Ordering
             txtPrice.Text = string.Empty;
         }
 
-        // nút tìm bằng OwnerId thủ công
-        private void btnFindOwner_Click(object sender, RoutedEventArgs e)
-        {
-            if (!int.TryParse(txtOwnerIdSearch.Text, out var ownerId) || ownerId <= 0)
-            {
-                MessageBox.Show("Vui lòng nhập OwnerId hợp lệ.", "Kiểm tra", MessageBoxButton.OK, MessageBoxImage.Warning);
-                return;
-            }
-            InitializeOwnerContext(ownerId);
-        }
+        //// nút tìm bằng OwnerId thủ công
+        //private void btnFindOwner_Click(object sender, RoutedEventArgs e)
+        //{
+        //    if (!int.TryParse(txtOwnerIdSearch.Text, out var ownerId) || ownerId <= 0)
+        //    {
+        //        MessageBox.Show("Vui lòng nhập OwnerId hợp lệ.", "Kiểm tra", MessageBoxButton.OK, MessageBoxImage.Warning);
+        //        return;
+        //    }
+        //    InitializeOwnerContext(ownerId);
+        //}
 
         // nút tải nhà hàng gắn với user hiện tại
-        private void btnLoadMine_Click(object sender, RoutedEventArgs e)
-        {
-            InitializeOwnerContext(null);
-        }
+        //private void btnLoadMine_Click(object sender, RoutedEventArgs e)
+        //{
+        //    InitializeOwnerContext(null);
+        //}
 
         private void btnAdd_Click(object sender, RoutedEventArgs e)
         {
