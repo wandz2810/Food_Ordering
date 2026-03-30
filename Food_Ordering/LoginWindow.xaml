@@ -129,29 +129,29 @@
                                      Style="{StaticResource InputStyle}"
                                      Margin="0,0,0,14"/>
 
-                        <TextBlock Text="Confirm Password" FontSize="12" Foreground="#555555" Margin="0,0,0,4"/>
+                        <TextBlock Text="Xác nhận mật khẩu" FontSize="12" Foreground="#555555" Margin="0,0,0,4"/>
                         <PasswordBox x:Name="txtRegConfirmPassword"
                                      Style="{StaticResource InputStyle}"
                                      Margin="0,0,0,24"/>
 
 
-                        <TextBlock Text="Full Name" FontSize="12" Foreground="#555555" Margin="0,0,0,4"/>
+                        <TextBlock Text="Họ và tên" FontSize="12" Foreground="#555555" Margin="0,0,0,4"/>
                         <TextBox x:Name="txtRegFullname"
                                  Style="{StaticResource InputStyle}"
                                  Margin="0,0,0,14"/>
 
-                        <TextBlock Text="Phone Number" FontSize="12" Foreground="#555555" Margin="0,0,0,4"/>
+                        <TextBlock Text="Số điện thoại" FontSize="12" Foreground="#555555" Margin="0,0,0,4"/>
                         <TextBox x:Name="txtRegPhone"
                                  Style="{StaticResource InputStyle}"
                                  Margin="0,0,0,14"/>
 
-                        <TextBlock Text="Register as" FontSize="12" Foreground="#555555" Margin="0,0,0,4"/>
+                        <TextBlock Text="đăng ký với tư cách" FontSize="12" Foreground="#555555" Margin="0,0,0,4"/>
                         <ComboBox Name="cbRegRole" FontSize="24" Margin="0, 0, 0,24" SelectionChanged="cbRegRole_SelectionChanged">
                         </ComboBox>
 
                         <GroupBox Name="grCustomer" Visibility="Hidden">
                             <StackPanel>
-                                <TextBlock Text="Address" FontSize="12" Foreground="#555555" Margin="0,0,0,4"/>
+                                <TextBlock Text="Địa chỉ nhà" FontSize="12" Foreground="#555555" Margin="0,0,0,4"/>
                                 <TextBox x:Name="txtRegAdress"
                                      Style="{StaticResource InputStyle}"
                                      Margin="0,0,0,14"/>
@@ -160,14 +160,14 @@
 
                         <GroupBox Name="grShipper" Visibility="Hidden">
                             <StackPanel>
-                                <TextBlock Text="License Plate" FontSize="12" Foreground="#555555" Margin="0,0,0,4"/>
+                                <TextBlock Text="Biển số xe" FontSize="12" Foreground="#555555" Margin="0,0,0,4"/>
                                 <TextBox x:Name="txtLicensePlate"
                                     Style="{StaticResource InputStyle}"
                                     Margin="0,0,0,14"/>
                             </StackPanel>
                         </GroupBox>
 
-                        <Button Content="Register"
+                        <Button Content="Đăng ký"
                                 Style="{StaticResource PrimaryButtonStyle}"
                                 Height="40"
                                 Click="btnRegister_Click"/>
