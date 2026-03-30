@@ -21,6 +21,9 @@ public partial class FoodItem
 
     public bool IsAvailable { get; set; }
 
+    [System.ComponentModel.DataAnnotations.Schema.NotMapped]
+    public int Quantity { get; set; } = 1;
+
     public int? DailyQuantityLimit { get; set; }
 
     public int DailyQuantityUsed { get; set; }
