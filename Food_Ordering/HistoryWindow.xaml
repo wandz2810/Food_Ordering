@@ -23,28 +23,19 @@
         </DockPanel>
 
         <DataGrid Grid.Row="1" x:Name="dgOrders" AutoGenerateColumns="False" 
-                  CanUserAddRows="False" IsReadOnly="True" 
-                  SelectionChanged="DgOrders_SelectionChanged" Background="White">
+          CanUserAddRows="False" IsReadOnly="True" 
+          SelectionChanged="DgOrders_SelectionChanged" Background="White">
             <DataGrid.Columns>
                 <DataGridTextColumn Header="Mã Đơn" Binding="{Binding OrderId}" Width="60"/>
-                <DataGridTextColumn Header="Nhà hàng" Binding="{Binding Restaurant.Name}" Width="150"/>
-                <DataGridTextColumn Header="Ngày đặt" Binding="{Binding CreatedAt, StringFormat=\{0:dd/MM/yyyy HH:mm\}}" Width="130"/>
-                <DataGridTextColumn Header="Tổng tiền" Binding="{Binding TotalAmount, StringFormat=\{0:N0\}đ}" Width="90"/>
-                <DataGridTextColumn Header="Trạng thái" Binding="{Binding Status}" Width="110"/>
-                <DataGridTextColumn Header="Shipper" Binding="{Binding Shipper.FullName}" Width="120"/>
 
-                <DataGridTemplateColumn Header="Thao tác" Width="*">
-                    <DataGridTemplateColumn.CellTemplate>
-                        <DataTemplate>
-                            <StackPanel Orientation="Horizontal">
-                                <Button Content="Hủy đơn" Margin="2" Padding="8,2" Background="#E74C3C" Foreground="White"
-                                        Click="BtnCancelOrder_Click" Cursor="Hand"/>
-                                <Button Content="Đã nhận hàng" Margin="2" Padding="8,2" Background="#27AE60" Foreground="White"
-                                        Click="BtnReceived_Click" Cursor="Hand"/>
-                            </StackPanel>
-                        </DataTemplate>
-                    </DataGridTemplateColumn.CellTemplate>
-                </DataGridTemplateColumn>
+                <DataGridTextColumn Header="Nhà hàng" Binding="{Binding Restaurant.Name}" Width="*"/>
+
+                <DataGridTextColumn Header="Ngày đặt" Binding="{Binding CreatedAt, StringFormat=\{0:dd/MM/yyyy HH:mm\}}" Width="130"/>
+                <DataGridTextColumn Header="Tổng tiền" Binding="{Binding TotalAmount, StringFormat=\{0:N0\}đ}" Width="100"/>
+                <DataGridTextColumn Header="Trạng thái" Binding="{Binding Status}" Width="110"/>
+
+                <DataGridTextColumn Header="Shipper" Binding="{Binding Shipper.FullName}" Width="150"/>
+
             </DataGrid.Columns>
         </DataGrid>
 
