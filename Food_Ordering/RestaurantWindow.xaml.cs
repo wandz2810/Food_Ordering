@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Windows;
 using System.Windows.Controls;
 using Food_Ordering.Entities;
@@ -14,12 +14,23 @@ namespace Food_Ordering
         public RestaurantWindow(User user)
         {
             InitializeComponent();
+            _currentUser = user;
             service = new RestaurantOwnerService(user);
 
-            // Tự động thử load nhà hàng của user hiện tại (nếu App.CurrentUserId đã được set)
-            InitializeOwnerContext();
-            _currentUser = user;
-            currentRestaurantId = service.GetRestaurant(user.UserId)?.RestaurantId ?? 0;
+            // Lấy nhà hàng của user hiện tại dựa trên UserId của user đã đăng nhập
+            var restaurant = service.GetRestaurant(user.UserId);
+            if (restaurant != null)
+            {
+                currentRestaurantId = restaurant.RestaurantId;
+                EnableOwnerControls();
+            }
+            else
+            {
+                currentRestaurantId = 0;
+                DisableOwnerControls();
+                MessageBox.Show($"Không tìm thấy nhà hàng cho tài khoản này.", "Không tìm thấy", MessageBoxButton.OK, MessageBoxImage.Warning);
+            }
+
             LoadMenu();
         }
 

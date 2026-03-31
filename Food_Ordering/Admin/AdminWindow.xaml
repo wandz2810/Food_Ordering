@@ -163,7 +163,7 @@
                             <DataGridTextColumn Header="ID" Binding="{Binding RestaurantId}" Width="40"/>
                             <DataGridTextColumn Header="Name" Binding="{Binding Name}" Width="160"/>
                             <DataGridTextColumn Header="Address" Binding="{Binding Address}" Width="200"/>
-                            <DataGridTextColumn Header="Owner" Binding="{Binding Owner.Owner.FullName}" Width="130"/>
+                            <DataGridTextColumn Header="Owner" Binding="{Binding OwnerName}" Width="130"/>
                             <DataGridCheckBoxColumn Header="Open" Binding="{Binding IsOpen}" Width="50"/>
                             <DataGridTextColumn Header="Rating" Binding="{Binding AverageRating, StringFormat=0.00}" Width="60"/>
                             <DataGridTextColumn Header="Orders" Binding="{Binding TotalOrders}" Width="60"/>
@@ -273,95 +273,12 @@
                             <DataGridTextColumn Header="Name" Binding="{Binding Name}" Width="180"/>
                             <DataGridTextColumn Header="Price" Binding="{Binding Price, StringFormat=N0}" Width="90"/>
                             <DataGridTextColumn Header="Category" Binding="{Binding Category}" Width="100"/>
-                            <DataGridTextColumn Header="Restaurant" Binding="{Binding Restaurant.Name}" Width="150"/>
+                            <DataGridTextColumn Header="Restaurant" Binding="{Binding RestaurantName}" Width="150"/>
                             <DataGridCheckBoxColumn Header="Available" Binding="{Binding IsAvailable}" Width="70"/>
                             <DataGridTextColumn Header="Limit" Binding="{Binding DailyQuantityLimit}" Width="60"/>
                             <DataGridTextColumn Header="Used" Binding="{Binding DailyQuantityUsed}" Width="50"/>
                         </DataGrid.Columns>
                     </DataGrid>
-                </Grid>
-            </TabItem>
-
-            <!-- ─── APPLICATIONS ─── -->
-            <TabItem Header="Applications">
-                <Grid Margin="10">
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="*"/>
-                        <RowDefinition Height="*"/>
-                    </Grid.RowDefinitions>
-
-                    <!-- Shipper Applications -->
-                    <GroupBox Grid.Row="0" Margin="0,0,0,5">
-                        <GroupBox.Header>
-                            <StackPanel Orientation="Horizontal">
-                                <TextBlock Text="Shipper Applications" FontWeight="Bold" VerticalAlignment="Center" Margin="0,0,10,0"/>
-                                <ComboBox x:Name="cbShipperAppFilter" Width="100"
-                                          SelectionChanged="cbShipperAppFilter_SelectionChanged"/>
-                            </StackPanel>
-                        </GroupBox.Header>
-                        <StackPanel>
-                            <DataGrid x:Name="dgShipperApps" Height="140" AutoGenerateColumns="False" IsReadOnly="True"
-                                      CanUserAddRows="False" SelectionMode="Single" SelectionChanged="dgShipperApps_SelectionChanged">
-                                <DataGrid.Columns>
-                                    <DataGridTextColumn Header="ID" Binding="{Binding ApplicationId}" Width="40"/>
-                                    <DataGridTextColumn Header="User" Binding="{Binding User.FullName}" Width="130"/>
-                                    <DataGridTextColumn Header="Email" Binding="{Binding User.Email}" Width="160"/>
-                                    <DataGridTextColumn Header="Vehicle" Binding="{Binding VehicleType}" Width="80"/>
-                                    <DataGridTextColumn Header="Plate" Binding="{Binding LicensePlate}" Width="100"/>
-                                    <DataGridTextColumn Header="ID Card" Binding="{Binding IdentityCard}" Width="110"/>
-                                    <DataGridTextColumn Header="Status" Binding="{Binding Status}" Width="70"/>
-                                </DataGrid.Columns>
-                            </DataGrid>
-                            <StackPanel Orientation="Horizontal" Margin="0,5,0,0">
-                                <TextBlock Text="Note:" VerticalAlignment="Center" Margin="0,0,5,0"/>
-                                <TextBox x:Name="txtShipperAppNote" Width="300" Margin="0,0,10,0"/>
-                                <Button Content="Approve" Width="80" Margin="0,0,5,0" Background="#27AE60" Foreground="White"
-                                        FontWeight="Bold" Click="btnApproveShipperApp_Click">
-                                    <Button.Resources><Style TargetType="Border"><Setter Property="CornerRadius" Value="5"/></Style></Button.Resources>
-                                </Button>
-                                <Button Content="Reject" Width="80" Background="#E74C3C" Foreground="White"
-                                        FontWeight="Bold" Click="btnRejectShipperApp_Click">
-                                    <Button.Resources><Style TargetType="Border"><Setter Property="CornerRadius" Value="5"/></Style></Button.Resources>
-                                </Button>
-                            </StackPanel>
-                        </StackPanel>
-                    </GroupBox>
-
-                    <!-- Restaurant Applications -->
-                    <GroupBox Grid.Row="1" Margin="0,5,0,0">
-                        <GroupBox.Header>
-                            <StackPanel Orientation="Horizontal">
-                                <TextBlock Text="Restaurant Applications" FontWeight="Bold" VerticalAlignment="Center" Margin="0,0,10,0"/>
-                                <ComboBox x:Name="cbRestAppFilter" Width="100"
-                                          SelectionChanged="cbRestAppFilter_SelectionChanged"/>
-                            </StackPanel>
-                        </GroupBox.Header>
-                        <StackPanel>
-                            <DataGrid x:Name="dgRestApps" Height="140" AutoGenerateColumns="False" IsReadOnly="True"
-                                      CanUserAddRows="False" SelectionMode="Single" SelectionChanged="dgRestApps_SelectionChanged">
-                                <DataGrid.Columns>
-                                    <DataGridTextColumn Header="ID" Binding="{Binding ApplicationId}" Width="40"/>
-                                    <DataGridTextColumn Header="User" Binding="{Binding User.FullName}" Width="120"/>
-                                    <DataGridTextColumn Header="Restaurant" Binding="{Binding RestaurantName}" Width="150"/>
-                                    <DataGridTextColumn Header="Address" Binding="{Binding Address}" Width="180"/>
-                                    <DataGridTextColumn Header="Status" Binding="{Binding Status}" Width="70"/>
-                                    <DataGridTextColumn Header="Submitted" Binding="{Binding SubmittedAt, StringFormat=dd/MM/yyyy}" Width="90"/>
-                                </DataGrid.Columns>
-                            </DataGrid>
-                            <StackPanel Orientation="Horizontal" Margin="0,5,0,0">
-                                <TextBlock Text="Note:" VerticalAlignment="Center" Margin="0,0,5,0"/>
-                                <TextBox x:Name="txtRestAppNote" Width="300" Margin="0,0,10,0"/>
-                                <Button Content="Approve" Width="80" Margin="0,0,5,0" Background="#27AE60" Foreground="White"
-                                        FontWeight="Bold" Click="btnApproveRestApp_Click">
-                                    <Button.Resources><Style TargetType="Border"><Setter Property="CornerRadius" Value="5"/></Style></Button.Resources>
-                                </Button>
-                                <Button Content="Reject" Width="80" Background="#E74C3C" Foreground="White"
-                                        FontWeight="Bold" Click="btnRejectRestApp_Click">
-                                    <Button.Resources><Style TargetType="Border"><Setter Property="CornerRadius" Value="5"/></Style></Button.Resources>
-                                </Button>
-                            </StackPanel>
-                        </StackPanel>
-                    </GroupBox>
                 </Grid>
             </TabItem>
 
