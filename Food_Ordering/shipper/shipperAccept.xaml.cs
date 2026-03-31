@@ -37,7 +37,7 @@ namespace Food_Ordering.shipper
                 txtNote.Text = string.IsNullOrWhiteSpace(order.Note) ? "No note" : order.Note;
                 txtStatus.Text = order.Status;
 
-                if (order.Status == "Đang chờ tài xế")
+                if (order.Status == "WaitingShipper")
                 {
                     btnPickedUp.Visibility = Visibility.Visible;
                     btnDelivered.Visibility = Visibility.Collapsed;
@@ -73,7 +73,7 @@ namespace Food_Ordering.shipper
                     return;
                 }
 
-                if (order.Status != "Đang chờ tài xế")
+                if (order.Status != "WaitingShipper")
                 {
                     MessageBox.Show("Chỉ đơn hàng có trạng thái Đang chờ tài xế mới được lấy hàng.");
                     return;
