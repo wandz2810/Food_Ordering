@@ -33,9 +33,9 @@ namespace Food_Ordering.Admin
             cbUserFilter.SelectedIndex = 0;
             cbEditStatus.ItemsSource   = new List<string> { "Active", "Inactive", "Banned" };
             cbEditStatus.SelectedIndex = 0;
-            cbOrderStatusFilter.ItemsSource = new List<string> { "All", "PendingPayment", "PaymentSuccess", "PaymentFailed", "WaitingShipper", "HeadingToRestaurant", "WaitingFood", "Delivering", "Delivered", "Cancelled" };
+            cbOrderStatusFilter.ItemsSource = new List<string> { "All", "PendingPayment", "PaymentSuccess", "PaymentFailed", "Đang chờ tài xế", "HeadingToRestaurant", "WaitingFood", "Delivering", "Delivered", "Cancelled" };
             cbOrderStatusFilter.SelectedIndex = 0;
-            cbOrderNewStatus.ItemsSource = new List<string> { "PendingPayment", "PaymentSuccess", "PaymentFailed", "WaitingShipper", "HeadingToRestaurant", "WaitingFood", "Delivering", "Delivered", "Cancelled" };
+            cbOrderNewStatus.ItemsSource = new List<string> { "PendingPayment", "PaymentSuccess", "PaymentFailed", "Đang chờ tài xế", "HeadingToRestaurant", "WaitingFood", "Delivering", "Delivered", "Cancelled" };
             cbOrderNewStatus.SelectedIndex = 0;
         }
 
@@ -65,7 +65,7 @@ namespace Food_Ordering.Admin
         {
             try
             {
-                var pendingStatuses = new[] { "PendingPayment", "WaitingShipper", "WaitingFood" };
+                var pendingStatuses = new[] { "PendingPayment", "Đang chờ tài xế", "WaitingFood" };
                 var stats = new List<DashboardRow>
                 {
                     new() { Metric = "Total Users",              Value = _db.Users.Count().ToString() },

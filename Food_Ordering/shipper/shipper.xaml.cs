@@ -60,7 +60,7 @@ namespace Food_Ordering.shipper
                 using FoodOrderingDbContext context = new FoodOrderingDbContext();
 
                 dgOrders.ItemsSource = context.Orders
-                                              .Where(o => o.Status == "WaitingShipper")
+                                              .Where(o => o.Status == "Đang chờ tài xế")
                                               .OrderBy(o => o.OrderId)
                                               .ToList();
             }
