@@ -1,4 +1,4 @@
-﻿<Window x:Class="Food_Ordering.RestaurantWindow"
+<Window x:Class="Food_Ordering.RestaurantWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         Title="Quản lý món ăn" Height="500" Width="900">
@@ -14,12 +14,12 @@
 
         <!-- Khu tìm nhà hàng theo OwnerId + khu nhập món -->
         <StackPanel Grid.Row="0" Orientation="Vertical" Margin="0,0,0,10">
-            <StackPanel Orientation="Horizontal" Margin="0,0,0,6">
+            <!--<StackPanel Orientation="Horizontal" Margin="0,0,0,6">
                 <TextBlock Text="OwnerId:" VerticalAlignment="Center" Margin="0,0,6,0"/>
                 <TextBox x:Name="txtOwnerIdSearch" Width="100" Margin="0,0,10,0"/>
                 <Button x:Name="btnFindOwner" Content="Tìm theo OwnerId" Click="btnFindOwner_Click" Margin="0,0,8,0"/>
                 <Button x:Name="btnLoadMine" Content="Tải nhà hàng của tôi" Click="btnLoadMine_Click"/>
-            </StackPanel>
+            </StackPanel>-->
 
             <!-- Nhập thông tin món ăn -->
             <StackPanel Orientation="Horizontal">

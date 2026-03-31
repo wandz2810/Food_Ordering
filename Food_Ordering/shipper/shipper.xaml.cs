@@ -60,12 +60,13 @@ namespace Food_Ordering.shipper
                 using FoodOrderingDbContext context = new FoodOrderingDbContext();
 
                 dgOrders.ItemsSource = context.Orders
+                                              .Where(o => o.Status == "WaitingShipper")
                                               .OrderBy(o => o.OrderId)
                                               .ToList();
             }
-            catch
+            catch (Exception ex)
             {
-                dgOrders.ItemsSource = null;
+                MessageBox.Show("Error loading orders: " + ex.Message);
             }
         }
 
