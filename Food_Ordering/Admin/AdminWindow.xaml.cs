@@ -33,9 +33,9 @@ namespace Food_Ordering.Admin
             cbUserFilter.SelectedIndex = 0;
             cbEditStatus.ItemsSource   = new List<string> { "Active", "Inactive", "Banned" };
             cbEditStatus.SelectedIndex = 0;
-            cbOrderStatusFilter.ItemsSource = new List<string> { "All", "PendingPayment", "PaymentSuccess", "PaymentFailed", "Đang chờ tài xế", "HeadingToRestaurant", "WaitingFood", "Delivering", "Delivered", "Cancelled" };
+            cbOrderStatusFilter.ItemsSource = new List<string> { "All", "PendingPayment", "PaymentSuccess", "PaymentFailed", "Đang chờ tài xế", "HeadingToRestaurant", "WaitingFood", "Delivering", "Đã giao hàng", "Cancelled" };
             cbOrderStatusFilter.SelectedIndex = 0;
-            cbOrderNewStatus.ItemsSource = new List<string> { "PendingPayment", "PaymentSuccess", "PaymentFailed", "Đang chờ tài xế", "HeadingToRestaurant", "WaitingFood", "Delivering", "Delivered", "Cancelled" };
+            cbOrderNewStatus.ItemsSource = new List<string> { "PendingPayment", "PaymentSuccess", "PaymentFailed", "Đang chờ tài xế", "HeadingToRestaurant", "WaitingFood", "Delivering", "Đã giao hàng", "Cancelled" };
             cbOrderNewStatus.SelectedIndex = 0;
         }
 
@@ -75,7 +75,7 @@ namespace Food_Ordering.Admin
                     new() { Metric = "Restaurants",              Value = _db.Restaurants.Count().ToString() },
                     new() { Metric = "Total Orders",             Value = _db.Orders.Count().ToString() },
                     new() { Metric = "Pending Orders",           Value = _db.Orders.Count(o => pendingStatuses.Contains(o.Status)).ToString() },
-                    new() { Metric = "Total Revenue (Delivered)",Value = (_db.Orders.Where(o => o.Status == "Delivered").Sum(o => (decimal?)o.TotalAmount) ?? 0).ToString("N0") + " VND" },
+                    new() { Metric = "Total Revenue (Delivered)",Value = (_db.Orders.Where(o => o.Status == "Đã giao hàng").Sum(o => (decimal?)o.TotalAmount) ?? 0).ToString("N0") + " VND" },
                 };
                 dgDashboard.ItemsSource = stats;
             }

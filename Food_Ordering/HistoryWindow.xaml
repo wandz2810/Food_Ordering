@@ -34,7 +34,7 @@
                 <DataGridTextColumn Header="Tổng tiền" Binding="{Binding TotalAmount, StringFormat=\{0:N0\}đ}" Width="100"/>
                 <DataGridTextColumn Header="Trạng thái" Binding="{Binding Status}" Width="110"/>
 
-                <DataGridTextColumn Header="Shipper" Binding="{Binding Shipper.FullName}" Width="150"/>
+                <DataGridTextColumn Header="Shipper" Binding="{Binding Shipper.FullName}" Width="*" />
 
             </DataGrid.Columns>
         </DataGrid>

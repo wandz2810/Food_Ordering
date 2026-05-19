@@ -54,7 +54,7 @@ namespace Food_Ordering
                     RestaurantId = _selectedItems.First().RestaurantId,
                     TotalAmount = _selectedItems.Sum(x => x.Price * x.Quantity),
                     DeliveryAddress = txtAddress.Text,
-                    Status = "WaitingShipper",
+                    Status = "Đang chờ tài xế",
                     CreatedAt = DateTime.Now,
                     UpdatedAt = DateTime.Now,
                     PaymentMethod = "Cash",

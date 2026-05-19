@@ -106,24 +106,17 @@
         </Border>
 
         <!-- Khu vực nút -->
-        <StackPanel Grid.Row="4"
-                    Orientation="Horizontal"
-                    HorizontalAlignment="Center">
-
+        <StackPanel Grid.Row="4" Orientation="Horizontal" HorizontalAlignment="Center">
             <Button x:Name="btnPickedUp"
-                    Content="Đã lấy hàng"
-                    Width="120"
-                    Height="35"
-                    Margin="5"
-                    Click="btnPickedUp_Click"/>
+            Content="Xác nhận lấy hàng" 
+            Width="120" Height="35" Margin="5"
+            Click="btnPickedUp_Click"/>
 
             <Button x:Name="btnDelivered"
-                    Content="Đã giao"
-                    Width="120"
-                    Height="35"
-                    Margin="5"
-                    Visibility="Collapsed"
-                    Click="btnDelivered_Click"/>
+            Content="Giao hàng thành công" 
+            Width="150" Height="35" Margin="5"
+            Visibility="Collapsed"
+            Click="btnDelivered_Click"/>
         </StackPanel>
     </Grid>
 </Window>
